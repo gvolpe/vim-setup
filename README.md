@@ -69,3 +69,57 @@ stack install cabal-install
 ```
 
 Also, don't forget to add `~/.local/bin` to your `PATH` if the script doesn't do it automatically.
+
+### [Scala Metals LSP](https://github.com/scalameta/metals) on NeoVim
+
+Some of the instructions are the same as here: https://github.com/scalameta/metals/blob/master/docs/installation.md
+
+#### Add global sbt plugin `MetalsPlugin`
+
+Add the [MetalsPlugin](https://github.com/scalameta/metals/blob/master/project/MetalsPlugin.scala) to your global sbt
+plugins:
+
+- (sbt 0.13) `~/.sbt/0.13/plugins/MetalsPlugin.scala`
+- (sbt 1.+) `~/.sbt/1.0/plugins/MetalsPlugin.scala`
+
+### Add global sbt plugin `semanticdb-scalac`
+
+Add this to `~/.sbt/1.0/plugins/build.sbt` (or `sbt 0.13`):
+
+```
+addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "2.1.8" cross CrossVersion.full)
+scalacOptions += "-Yrangepos"
+```
+
+#### Install coursier
+
+```
+curl -L -o coursier https://git.io/vgvpD && chmod +x coursier
+```
+
+#### Generate scalameta_lsp executable
+
+```
+./coursier bootstrap org.scalameta:metaserver_2.12:a212acd7 -r bintray:scalameta/maven -r bintray:dhpcs/maven -M scala.meta.languageserver.Main -o scalameta_lsp -f --standalone
+```
+
+Where `a212acd7` is the Git hash version. Find out what the latest version is here: https://bintray.com/scalameta/maven/metaserver
+
+#### Run `scalameta_lsp` using the `LanguageClient` plugin (see [init.vim](init.vim) file)
+
+```
+let g:LanguageClient_serverCommands = {
+    \ 'scala': ['~/scalameta_lsp'],
+    \ }
+```
+
+#### At the project level
+
+Start an `sbt` session and run `metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
+terminal, it should start working as soon as you open a scala file of that project. I got working these features:
+
+- [x] Autocompletion on both my source and my dependencies.
+- [x] Compiler errors in realtime.
+- [x] Unused imports warnings.
+
+And I haven't fully explored yet!

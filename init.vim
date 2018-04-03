@@ -27,7 +27,6 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }     " autocompleti
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
 
-" Plug 'eed3si9n/LanguageClient-neovim'                           " when using Scala with LSP
 " Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
 " Plug 'neovimhaskell/haskell-vim'
 " Plug 'eagletmt/neco-ghc'
@@ -192,17 +191,10 @@ nnoremap <C-p> :FZF<CR>
 " Navigate to definition shortcut
 nnoremap <C-g> <C-]>
 
-" sbt-server
-" set signcolumn=yes
-"let g:LanguageClient_serverCommands = {
-"    \ 'scala': ['node', expand('~/development/sbt-server-stdio.js')]
-"    \ }
-
-" LSP
+" LSP Plugin for Haskell (hie) & Scala (metals)
 let g:LanguageClient_autoStart = 1
-
-" Haskell IDE Plugin
 let g:LanguageClient_serverCommands = {
+    \ 'scala': ['~/scalameta_lsp'],
     \ 'haskell': ['hie', '--lsp', '-d', '-l', '~/hie.log'],
     \ }
 
