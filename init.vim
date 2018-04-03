@@ -6,12 +6,11 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'tpope/vim-fugitive'                                         " git plugin
 Plug 'vim-airline/vim-airline'                                    " bottom status bar
-Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'                             " status bar themes
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy finder conf
 Plug 'junegunn/fzf.vim'                                           " fuzzy finder
 Plug 'scrooloose/nerdtree'                                        " folders tree
 Plug 'dracula/vim'                                                " dark theme
-Plug 'derekwyatt/vim-scala'                                       " scala plugin
 Plug 'kien/rainbow_parentheses.vim'                               " for nested parentheses
 Plug 'tpope/vim-surround'                                         " quickly edit surroundings (brackets, html tags, etc)
 Plug 'junegunn/vim-easy-align'                                    " alignment plugin
@@ -30,6 +29,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }     " autocompleti
 " Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
 " Plug 'neovimhaskell/haskell-vim'
 " Plug 'eagletmt/neco-ghc'
+" Plug 'derekwyatt/vim-scala'                                     " scala plugin
 
 call plug#end()
 

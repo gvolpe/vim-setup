@@ -121,5 +121,7 @@ terminal, it should start working as soon as you open a scala file of that proje
 - [x] Autocompletion on both my source and my dependencies.
 - [x] Compiler errors in realtime.
 - [x] Unused imports warnings.
+- [ ] Sort imports. (possible by using vim-scala as well)
+- [ ] Remove unused imports.
 
-And I haven't fully explored yet!
+And I haven't fully explored it yet!
