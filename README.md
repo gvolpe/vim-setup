@@ -118,10 +118,12 @@ let g:LanguageClient_serverCommands = {
 Start an `sbt` session and run `metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
 terminal, it should start working as soon as you open a scala file of that project. I got working these features:
 
-- [x] Autocompletion on both my source and my dependencies.
-- [x] Compiler errors in realtime.
-- [x] Unused imports warnings.
-- [ ] Sort imports. (possible by using vim-scala as well)
-- [ ] Remove unused imports.
+- [x] Autocompletion on both my source and my dependencies source.
+- [x] Jump to definition on both my source and my dependencies source.
+- [x] Compiler errors in real time.
+- [x] Unused imports warnings in real time.
+- [ ] Sort imports (possible by using vim-scala).
+- [ ] Remove unused imports (still no support).
+- [ ] Rename functions and variable names (not working).
 
 And I haven't fully explored it yet!
