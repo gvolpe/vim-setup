@@ -188,9 +188,6 @@ augroup END
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
 
-" Navigate to definition shortcut
-nnoremap <C-g> <C-]>
-
 " LSP Plugin for Haskell (hie) & Scala (metals)
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
@@ -199,5 +196,5 @@ let g:LanguageClient_serverCommands = {
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
