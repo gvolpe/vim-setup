@@ -198,3 +198,6 @@ let g:LanguageClient_serverCommands = {
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+" remove unused imports (rui) on Scala
+nnoremap <silent> rui :call LanguageClient_textDocument_codeAction()<CR>

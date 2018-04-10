@@ -115,7 +115,7 @@ let g:LanguageClient_serverCommands = {
 
 #### At the project level
 
-Start an `sbt` session and run `metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
+Start an `sbt` session and run `*:metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
 terminal, it should start working as soon as you open a scala file of that project.
 
 #### Features
@@ -124,7 +124,8 @@ terminal, it should start working as soon as you open a scala file of that proje
 - [x] Jump to definition on both my source and my dependencies source.
 - [x] Compiler errors in real time.
 - [x] Unused imports warnings in real time.
-- [ ] Sort imports (possible by using vim-scala).
-- [ ] Remove unused imports (still no support).
+- [x] Remove unused imports.
 - [ ] Auto import from classpath (still no support).
 - [ ] Rename functions and variable names (not working).
+- [ ] Sort imports (possible by using vim-scala).
+
