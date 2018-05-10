@@ -72,19 +72,19 @@ Also, don't forget to add `~/.local/bin` to your `PATH` if the script doesn't do
 
 ### [Scala Metals LSP](https://github.com/scalameta/metals) on NeoVim
 
-Some of the instructions are the same as here: https://github.com/scalameta/metals/blob/master/docs/installation.md
+Some of the instructions are the same as here: https://scalameta.org/metals/docs/installation-contributors.html
 
 #### Add global sbt plugin `MetalsPlugin`
 
-Add the [MetalsPlugin](https://github.com/scalameta/metals/blob/master/project/MetalsPlugin.scala) to your global sbt
-plugins:
+Add this to your sbt plugins `~/.sbt/1.x/plugins/plugins.sbt`:
 
-- (sbt 0.13) `~/.sbt/0.13/plugins/MetalsPlugin.scala`
-- (sbt 1.+) `~/.sbt/1.0/plugins/MetalsPlugin.scala`
+```
+addSbtPlugin("org.scalameta" % "sbt-metals" % "version") // at the moment of writing this: "0.1.0-M1+138-4625a657"
+```
 
 ### Add global sbt plugin `semanticdb-scalac`
 
-Add this to `~/.sbt/1.0/plugins/build.sbt` (or `sbt 0.13`):
+Add this to your `~/.sbt/1.x/plugins/build.sbt`:
 
 ```
 addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "2.1.8" cross CrossVersion.full)
@@ -115,7 +115,7 @@ let g:LanguageClient_serverCommands = {
 
 #### At the project level
 
-Start an `sbt` session and run `*:metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
+Start an `sbt` session and run `metalsSetup` the first time. Leave the session open and start `NeoVim` in a different
 terminal, it should start working as soon as you open a scala file of that project.
 
 #### Features
