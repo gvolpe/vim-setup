@@ -4,24 +4,24 @@ filetype off                " required
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'tpope/vim-fugitive'                                         " git plugin
-Plug 'vim-airline/vim-airline'                                    " bottom status bar
-Plug 'vim-airline/vim-airline-themes'                             " status bar themes
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy finder conf
-Plug 'junegunn/fzf.vim'                                           " fuzzy finder
-Plug 'scrooloose/nerdtree'                                        " folders tree
-Plug 'dracula/vim'                                                " dark theme
-Plug 'kien/rainbow_parentheses.vim'                               " for nested parentheses
-Plug 'tpope/vim-surround'                                         " quickly edit surroundings (brackets, html tags, etc)
-Plug 'junegunn/vim-easy-align'                                    " alignment plugin
-Plug 'neomake/neomake'                                            " run programs asynchronously and highlight errors
-Plug 'ryanoasis/vim-devicons'                                     " add icons to NerdTree and other plugins
-Plug 'Valloric/MatchTagAlways'                                    " highlights html enclosing tags
+Plug 'tpope/vim-fugitive'                                                    " git plugin
+Plug 'vim-airline/vim-airline'                                               " bottom status bar
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }            " fuzzy finder conf
+Plug 'junegunn/fzf.vim'                                                      " fuzzy finder
+Plug 'scrooloose/nerdtree'                                                   " folders tree
+Plug 'dracula/vim'                                                           " dark theme
+Plug 'kien/rainbow_parentheses.vim'                                          " for nested parentheses
+Plug 'tpope/vim-surround'                                                    " quickly edit surroundings (brackets, html tags, etc)
+Plug 'junegunn/vim-easy-align'                                               " alignment plugin
+Plug 'neomake/neomake'                                                       " run programs asynchronously and highlight errors
+Plug 'Valloric/MatchTagAlways'                                               " highlights html enclosing tags
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': './install.sh'
-    \ }                                                           " LSP plugin for Haskell Ide Plugin (hie)
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }     " autocompletion plugin
+    \ }                                                                      " LSP plugin for Haskell Ide Plugin (hie)
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
+Plug 'felixmulder/metals-filewatcher.nvim', { 'do': ':UpdateRemotePlugins' } " LSP implementation for didChangeWatchedFiles
 
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
@@ -39,9 +39,38 @@ call plug#end()
 " Use deoplete
 let g:python3_host_prog = '/usr/bin/python3'
 let g:deoplete#enable_at_startup = 1
+let g:airline_powerline_fonts=1
 
 " Neomake on save
 " autocmd! BufWritePost * Neomake
+
+" Better Unix support
+set viewoptions=folds,options,cursor,unix,slash
+set encoding=utf-8
+
+" Handle window actions with Meta instead of <C-w>
+" Switching
+nnoremap <M-h> <C-w>h
+nnoremap <M-j> <C-w>j
+nnoremap <M-k> <C-w>k
+nnoremap <M-l> <C-w>l
+
+" Moving
+nnoremap <M-H> <C-w>H
+nnoremap <M-J> <C-w>J
+nnoremap <M-K> <C-w>K
+nnoremap <M-L> <C-w>L
+nnoremap <M-x> <C-w>x
+
+" Resizing
+nnoremap <M-=> <C-w>=
+nnoremap <M-+> <C-w>+
+nnoremap <M--> <C-w>-
+nnoremap <M-<> <C-w><
+nnoremap <M->> <C-w>>
+
+" Terminal mode exit shortcut
+:tnoremap <Esc> <C-\><C-n>
 
 " Nerdtree git plugin symbols
 let g:NERDTreeIndicatorMapCustom = {
@@ -144,9 +173,6 @@ set tabstop=2     " Sets tab character to correspond to x columns.
 set softtabstop=2 " column offset when PRESSING the tab key or the backspace key.
 set shiftwidth=2  " column offset when using keys '>' and '<' in normal mode.
 
-let g:airline_theme='solarized'
-let g:airline_powerline_fonts=1
-
 " Tabs
 " Displays the list of multiple match for a tag by default.
 " <C-]> is mapped to :tag <current_word> (jump to the first match) by default.
@@ -188,16 +214,17 @@ augroup END
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
 
+let g:LanguageClient_loggingLevel = 'DEBUG'
+
 " LSP Plugin for Haskell (hie) & Scala (metals)
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['~/.local/bin/hie', '--lsp', '-d', '-l', '~/hie.log'],
     \ 'scala': ['~/scalameta_lsp'],
-    \ 'haskell': ['hie', '--lsp', '-d', '-l', '~/hie.log'],
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-
-" remove unused imports (rui) on Scala
 nnoremap <silent> rui :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> tt :call LanguageClient_textDocument_signatureHelp()<CR>
