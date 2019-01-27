@@ -16,20 +16,20 @@ Plug 'tpope/vim-surround'                                                    " q
 Plug 'junegunn/vim-easy-align'                                               " alignment plugin
 Plug 'neomake/neomake'                                                       " run programs asynchronously and highlight errors
 Plug 'Valloric/MatchTagAlways'                                               " highlights html enclosing tags
+Plug 'natebosch/vim-lsc'                                                     " LSP client
+Plug 'Twinside/vim-hoogle'                                                   " Hoogle search (Haskell) in Vim
+Plug 'Shougo/unite.vim'                                                      " Required by some haskell plugins
+Plug 'ujihisa/unite-haskellimport'                                           " Suggestions on imports
+Plug 'eagletmt/unite-haddock'                                                " Hoogle results on the Vim buffer
+Plug 'vmchale/dhall-vim'                                                     " Syntax highlighting for Dhall lang
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
+
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
-    \ 'do': './install.sh'
+    \ 'do': 'bash install.sh'
     \ }                                                                      " LSP plugin for Haskell Ide Plugin (hie)
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
-Plug 'felixmulder/metals-filewatcher.nvim', { 'do': ':UpdateRemotePlugins' } " LSP implementation for didChangeWatchedFiles
 
-" Plug 'easymotion/vim-easymotion'
-" Plug 'tpope/vim-repeat'
-
-" Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
-" Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc'
-" Plug 'derekwyatt/vim-scala'                                     " scala plugin
+Plug 'derekwyatt/vim-scala'                                                  " scala plugin
 
 call plug#end()
 
@@ -39,10 +39,9 @@ call plug#end()
 " Use deoplete
 let g:python3_host_prog = '/usr/bin/python3'
 let g:deoplete#enable_at_startup = 1
-let g:airline_powerline_fonts=1
 
-" Neomake on save
-" autocmd! BufWritePost * Neomake
+" airline: status bar at the bottom
+let g:airline_powerline_fonts=1
 
 " Better Unix support
 set viewoptions=folds,options,cursor,unix,slash
@@ -109,8 +108,15 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-"    Nerdtree
+" Nerdtree
 map <C-F> :NERDTreeToggle<CR>
+map <C-S> :NERDTreeFind<CR>
+
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
 
 " Other options
 let mapleader=','
@@ -121,21 +127,10 @@ set shell=/bin/bash
 set laststatus=2
 set noshowmode
 
-" Draw a line at 120 columns
-set colorcolumn=120
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
-
 " Fixes broken cursor on Linux
 set guicursor=
 
-" NerdTree config
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeDirArrows = 1
-
-                            " General editor options
+" General editor options
 set hidden                  " Hide files when leaving them.
 set number                  " Show line numbers.
 set numberwidth=1           " Minimum line number column width.
@@ -157,14 +152,6 @@ set ignorecase " Case insensitive.
 set smartcase  " Case insensitive if no uppercase letter in pattern, case sensitive otherwise.
 set nowrapscan " Don't go back to first match after the last match is found.
 
-" Fold
-" set foldmethod=indent
-" set foldlevelstart=1
-
-" Indentation
-"set autoindent
-"set smartindent
-
 " Tabs
 set expandtab     " Tab transformed in spaces
 set tabstop=2     " Sets tab character to correspond to x columns.
@@ -172,27 +159,6 @@ set tabstop=2     " Sets tab character to correspond to x columns.
                   " If expandtab option is on each <tab> character is converted to x spaces.
 set softtabstop=2 " column offset when PRESSING the tab key or the backspace key.
 set shiftwidth=2  " column offset when using keys '>' and '<' in normal mode.
-
-" Tabs
-" Displays the list of multiple match for a tag by default.
-" <C-]> is mapped to :tag <current_word> (jump to the first match) by default.
-" g<C-]> is mapped to :tjump <current_word> (displays the list if multiple matches exist)
-" nnoremap <C-]> g<C-]>
-
-function! Refresh_tags(...)
-  if !executable('ctags')
-    echohl ErrorMsg
-    echom 'Refresh_tags : `ctags` executable not found, cannot refresh tags.'
-    echohl None
-    return
-  endif
-  if a:0 > 0
-    let dirPath = fnamemodify(a:1, ":p")
-    call jobstart(["ctags", "-f", dirPath . "tags", "-R", dirPath])
-  else
-    call jobstart(["ctags", "-R", "."])
-  endif
-endfunction
 
 " Toggle display of tabs and EOF
 nnoremap <leader>l :set list!<CR>
@@ -204,27 +170,52 @@ augroup vimscript_augroup
   autocmd FileType vim nnoremap <buffer> <M-z> :execute "help" expand("<cword>")<CR>
 augroup END
 
-" Scala
-augroup scala_augroup
-  autocmd!
-  autocmd BufWritePost *.scala :call Refresh_tags()
-  autocmd BufWritePost *.scala Neomake
-augroup END
-
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
 
-let g:LanguageClient_loggingLevel = 'DEBUG'
-
-" LSP Plugin for Haskell (hie) & Scala (metals)
+" LSP Plugin for Haskell (hie)
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['~/.local/bin/hie', '--lsp', '-d', '-l', '~/hie.log'],
-    \ 'scala': ['~/scalameta_lsp'],
-    \ }
+   \ 'haskell': ['hie', '--lsp', '-d', '-l', '~/hie.log'],
+   \ }
 
+" vim-scala
+au BufRead,BufNewFile *.sbt set filetype=scala
+
+" vim-lsc
+let g:lsc_enable_autocomplete = v:false
+let g:lsc_server_commands = {
+  \ 'scala': {
+  \    'command': '~/development/metals/bin/metals-vim',
+  \    'log_level': 'Log'
+  \  }
+  \}
+
+let g:lsc_auto_map = {
+  \ 'GoToDefinition': 'gd',
+  \ 'FindCodeActions': 'rui',
+  \ 'Rename': 'gR',
+  \ 'ShowHover': 'K',
+  \ 'AllDiagnostics': '<C-t>'
+\}
+
+" Shortcuts for LSP using Haskell
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> rui :call LanguageClient_textDocument_codeAction()<CR>
-nnoremap <silent> tt :call LanguageClient_textDocument_signatureHelp()<CR>
+nnoremap <silent> F :call LanguageClient_textDocument_formatting()<CR>
+nnoremap <silent> B :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> A :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> Z :call LanguageClient_textDocument_documentSymbol()<CR>
+
+" Haskell plugins
+nnoremap <silent> ;h :execute "Unite -start-insert haskellimport"<CR>
+nnoremap <silent> <C-h> :execute "Unite hoogle"<CR>
+
+" Diagnostics highlighting
+hi link ALEError Error
+hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
+hi link ALEWarning Warning
+hi link ALEInfo SpellCap
+
