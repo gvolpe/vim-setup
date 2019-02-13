@@ -22,6 +22,8 @@ Plug 'Shougo/unite.vim'                                                      " R
 Plug 'ujihisa/unite-haskellimport'                                           " Suggestions on imports
 Plug 'eagletmt/unite-haddock'                                                " Hoogle results on the Vim buffer
 Plug 'vmchale/dhall-vim'                                                     " Syntax highlighting for Dhall lang
+Plug 'terryma/vim-multiple-cursors'                                          " Multiple cursors selection, etc
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
 
 Plug 'autozimu/LanguageClient-neovim', {
@@ -218,4 +220,43 @@ hi link ALEError Error
 hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
 hi link ALEWarning Warning
 hi link ALEInfo SpellCap
+
+" Disable touchpad on startup / Enable it back on exit (at the OS level)
+" autocmd VimEnter * !touchpad-on-off
+" autocmd VimLeave * !touchpad-on-off
+
+" Disable arrow keys and page up / down
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
+vnoremap <Up> <nop>
+vnoremap <Down> <nop>
+vnoremap <Left> <nop>
+vnoremap <Right> <nop>
+noremap <PageUp> <nop>
+inoremap <PageUp> <nop>
+vnoremap <PageUp> <nop>
+noremap <PageDown> <nop>
+inoremap <PageDown> <nop>
+vnoremap <PageDown> <nop>
+
+" Disable mouse / touchpad (only in vim)
+set mouse=
+noremap <ScrollWheelUp> <nop>
+noremap <S-ScrollWheelUp> <nop>
+noremap <C-ScrollWheelUp> <nop>
+noremap <ScrollWheelDown> <nop>
+noremap <S-ScrollWheelDown> <nop>
+noremap <C-ScrollWheelDown> <nop>
+noremap <ScrollWheelLeft> <nop>
+noremap <S-ScrollWheelLeft> <nop>
+noremap <C-ScrollWheelLeft> <nop>
+noremap <ScrollWheelRight> <nop>
+noremap <S-ScrollWheelRight> <nop>
+noremap <C-ScrollWheelRight> <nop>
 
