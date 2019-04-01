@@ -10,6 +10,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }            " fuzzy finder conf
 Plug 'junegunn/fzf.vim'                                                      " fuzzy finder
 Plug 'scrooloose/nerdtree'                                                   " folders tree
+Plug 'scrooloose/nerdcommenter'                                              " code commenter
 Plug 'dracula/vim'                                                           " dark theme
 Plug 'kien/rainbow_parentheses.vim'                                          " for nested parentheses
 Plug 'tpope/vim-surround'                                                    " quickly edit surroundings (brackets, html tags, etc)
@@ -24,14 +25,22 @@ Plug 'eagletmt/unite-haddock'                                                " H
 Plug 'vmchale/dhall-vim'                                                     " Syntax highlighting for Dhall lang
 Plug 'terryma/vim-multiple-cursors'                                          " Multiple cursors selection, etc
 
+"Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}       " autocompletion plugin
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
+"Plug 'zxqfl/tabnine-vim'                                                     " autocompletion plugin
 
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh'
     \ }                                                                      " LSP plugin for Haskell Ide Plugin (hie)
 
-Plug 'derekwyatt/vim-scala'                                                  " scala plugin
+" Plug 'easymotion/vim-easymotion'
+" Plug 'tpope/vim-repeat'
+
+" Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
+" Plug 'neovimhaskell/haskell-vim'
+" Plug 'eagletmt/neco-ghc'
+Plug 'derekwyatt/vim-scala'                                     " scala plugin
 
 call plug#end()
 
@@ -39,11 +48,20 @@ call plug#end()
 " ===================
 
 " Use deoplete
-let g:python3_host_prog = '/usr/bin/python3'
-let g:deoplete#enable_at_startup = 1
+"let g:python3_host_prog = '/usr/bin/python3'
+"let g:deoplete#enable_at_startup = 1
 
 " airline: status bar at the bottom
 let g:airline_powerline_fonts=1
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" Neomake on save
+" autocmd! BufWritePost * Neomake
+
+" Nerd commenter
+filetype plugin on
 
 " Better Unix support
 set viewoptions=folds,options,cursor,unix,slash
@@ -69,6 +87,9 @@ nnoremap <M-+> <C-w>+
 nnoremap <M--> <C-w>-
 nnoremap <M-<> <C-w><
 nnoremap <M->> <C-w>>
+
+" Clear search highlighting
+nnoremap <C-z> :nohlsearch<CR>
 
 " Terminal mode exit shortcut
 :tnoremap <Esc> <C-\><C-n>
@@ -110,29 +131,35 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-" Nerdtree
+"    Nerdtree
 map <C-F> :NERDTreeToggle<CR>
 map <C-S> :NERDTreeFind<CR>
 
+" Other options
+let mapleader=','
+set backspace=2
+colorscheme dracula
+" colorscheme torte
+syntax on
+set shell=/bin/bash
+set laststatus=2
+set noshowmode
+
+" Draw a line at 120 columns
+" set colorcolumn=120
+" highlight ColorColumn ctermbg=235 guibg=#2c2d27
+
+" Fixes broken cursor on Linux
+set guicursor=
+
+" NerdTree config
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeDirArrows = 1
 
-" Other options
-let mapleader=','
-set backspace=2
-colorscheme dracula
-syntax on
-set shell=/bin/bash
-set laststatus=2
-set noshowmode
-
-" Fixes broken cursor on Linux
-set guicursor=
-
-" General editor options
+                            " General editor options
 set hidden                  " Hide files when leaving them.
 set number                  " Show line numbers.
 set numberwidth=1           " Minimum line number column width.
@@ -154,6 +181,14 @@ set ignorecase " Case insensitive.
 set smartcase  " Case insensitive if no uppercase letter in pattern, case sensitive otherwise.
 set nowrapscan " Don't go back to first match after the last match is found.
 
+" Fold
+" set foldmethod=indent
+" set foldlevelstart=1
+
+" Indentation
+"set autoindent
+"set smartindent
+
 " Tabs
 set expandtab     " Tab transformed in spaces
 set tabstop=2     " Sets tab character to correspond to x columns.
@@ -161,6 +196,27 @@ set tabstop=2     " Sets tab character to correspond to x columns.
                   " If expandtab option is on each <tab> character is converted to x spaces.
 set softtabstop=2 " column offset when PRESSING the tab key or the backspace key.
 set shiftwidth=2  " column offset when using keys '>' and '<' in normal mode.
+
+" Tabs
+" Displays the list of multiple match for a tag by default.
+" <C-]> is mapped to :tag <current_word> (jump to the first match) by default.
+" g<C-]> is mapped to :tjump <current_word> (displays the list if multiple matches exist)
+" nnoremap <C-]> g<C-]>
+
+function! Refresh_tags(...)
+  if !executable('ctags')
+    echohl ErrorMsg
+    echom 'Refresh_tags : `ctags` executable not found, cannot refresh tags.'
+    echohl None
+    return
+  endif
+  if a:0 > 0
+    let dirPath = fnamemodify(a:1, ":p")
+    call jobstart(["ctags", "-f", dirPath . "tags", "-R", dirPath])
+  else
+    call jobstart(["ctags", "-R", "."])
+  endif
+endfunction
 
 " Toggle display of tabs and EOF
 nnoremap <leader>l :set list!<CR>
@@ -172,20 +228,40 @@ augroup vimscript_augroup
   autocmd FileType vim nnoremap <buffer> <M-z> :execute "help" expand("<cword>")<CR>
 augroup END
 
+" Scala
+" augroup scala_augroup
+"  autocmd!
+"  autocmd BufWritePost *.scala :call Refresh_tags()
+"  autocmd BufWritePost *.scala Neomake
+" augroup END
+
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
+
+" let g:LanguageClient_loggingLevel = 'DEBUG'
 
 " LSP Plugin for Haskell (hie)
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-   \ 'haskell': ['hie', '--lsp', '-d', '-l', '~/hie.log'],
+   \ 'haskell': ['hie-wrapper', '--lsp', '-d', '-l', '~/hie.log'],
    \ }
+
+"   \ 'scala': ['~/development/metals/bin/metals-vim'],
+"    \ 'scala': ['~/scalameta_lsp'],
+"    \ 'scala': ['/workspace/oss/gimmerrors/.stack-work/install/x86_64-linux/lts-11.22/8.2.2/bin/gimmerrors'],
+"    \ 'scala': ['~/coursier launch -r bintray:scalameta/maven org.scalameta:metals_2.12:0.1.0-M1+271-f80d7904 -M scala.meta.metals.Main'],
+
+" Generate scalameta_lsp executable
+" ./coursier bootstrap org.scalameta:metals_2.12:0.1.0-M1+271-f80d7904 -r bintray:scalameta/maven -r bintray:dhpcs/maven -M scala.meta.metals.Main -o scalameta_lsp -f --standalone
+
+" Sarsi (https://github.com/aloiscochard/sarsi)
+" call rpcstart('sarsi-nvim')
 
 " vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
 
 " vim-lsc
-let g:lsc_enable_autocomplete = v:false
+"let g:lsc_enable_autocomplete = v:false
 let g:lsc_server_commands = {
   \ 'scala': {
   \    'command': '~/development/metals/bin/metals-vim',
@@ -195,11 +271,21 @@ let g:lsc_server_commands = {
 
 let g:lsc_auto_map = {
   \ 'GoToDefinition': 'gd',
+  \ 'FindReferences': 'gT',
   \ 'FindCodeActions': 'rui',
-  \ 'Rename': 'gR',
   \ 'ShowHover': 'K',
-  \ 'AllDiagnostics': '<C-t>'
+  \ 'Completion': 'completefunc',
 \}
+
+nnoremap <silent> <M-X> :LSClientAllDiagnostics<CR>
+nnoremap <silent> <M-Z> :ccl<CR>
+nnoremap <silent> <M-B> :call lsc#server#call(&filetype, 'workspace/executeCommand', { 'command': 'build-import' }, function('abs'))<CR>
+
+" Close preview window on autocompletion (metals / vim-lsc)
+autocmd CompleteDone * silent! pclose
+
+"\ 'AllDiagnostics': 'gR' does not work
+"\ 'Rename': 'gR',
 
 " Shortcuts for LSP using Haskell
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
@@ -208,7 +294,7 @@ nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> F :call LanguageClient_textDocument_formatting()<CR>
 nnoremap <silent> B :call LanguageClient_textDocument_references()<CR>
-nnoremap <silent> A :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> <C-a> :call LanguageClient_textDocument_codeAction()<CR>
 nnoremap <silent> Z :call LanguageClient_textDocument_documentSymbol()<CR>
 
 " Haskell plugins
@@ -259,4 +345,3 @@ noremap <C-ScrollWheelLeft> <nop>
 noremap <ScrollWheelRight> <nop>
 noremap <S-ScrollWheelRight> <nop>
 noremap <C-ScrollWheelRight> <nop>
-
