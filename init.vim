@@ -281,8 +281,11 @@ nnoremap <silent> <M-X> :LSClientAllDiagnostics<CR>
 nnoremap <silent> <M-Z> :ccl<CR>
 nnoremap <silent> <M-B> :call lsc#server#call(&filetype, 'workspace/executeCommand', { 'command': 'build-import' }, function('abs'))<CR>
 
+" No preview window on autocompletion
+set completeopt-=preview
+
 " Close preview window on autocompletion (metals / vim-lsc)
-autocmd CompleteDone * silent! pclose
+"autocmd CompleteDone * silent! pclose
 
 "\ 'AllDiagnostics': 'gR' does not work
 "\ 'Rename': 'gR',
