@@ -277,6 +277,9 @@ let g:lsc_auto_map = {
   \ 'Completion': 'completefunc',
 \}
 
+" close preview (shown for hover / signature help)
+nnoremap <leader> <Esc> :pclose<CR>
+
 nnoremap <silent> <M-X> :LSClientAllDiagnostics<CR>
 nnoremap <silent> <M-Z> :ccl<CR>
 nnoremap <silent> <M-B> :call lsc#server#call(&filetype, 'workspace/executeCommand', { 'command': 'build-import' }, function('abs'))<CR>
