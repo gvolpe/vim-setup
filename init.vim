@@ -4,61 +4,49 @@ filetype off                " required
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'tpope/vim-fugitive'                                                    " git plugin
-Plug 'vim-airline/vim-airline'                                               " bottom status bar
+Plug 'tpope/vim-fugitive'                                         " git plugin
+Plug 'vim-airline/vim-airline'                                    " bottom status bar
 Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }            " fuzzy finder conf
-Plug 'junegunn/fzf.vim'                                                      " fuzzy finder
-Plug 'scrooloose/nerdtree'                                                   " folders tree
-Plug 'scrooloose/nerdcommenter'                                              " code commenter
-Plug 'dracula/vim'                                                           " dark theme
-Plug 'kien/rainbow_parentheses.vim'                                          " for nested parentheses
-Plug 'tpope/vim-surround'                                                    " quickly edit surroundings (brackets, html tags, etc)
-Plug 'junegunn/vim-easy-align'                                               " alignment plugin
-Plug 'neomake/neomake'                                                       " run programs asynchronously and highlight errors
-Plug 'Valloric/MatchTagAlways'                                               " highlights html enclosing tags
-Plug 'natebosch/vim-lsc'                                                     " LSP client
-Plug 'Twinside/vim-hoogle'                                                   " Hoogle search (Haskell) in Vim
-Plug 'Shougo/unite.vim'                                                      " Required by some haskell plugins
-Plug 'ujihisa/unite-haskellimport'                                           " Suggestions on imports
-Plug 'eagletmt/unite-haddock'                                                " Hoogle results on the Vim buffer
-Plug 'vmchale/dhall-vim'                                                     " Syntax highlighting for Dhall lang
-Plug 'terryma/vim-multiple-cursors'                                          " Multiple cursors selection, etc
-
-"Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}       " autocompletion plugin
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }                " autocompletion plugin
-"Plug 'zxqfl/tabnine-vim'                                                     " autocompletion plugin
-
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh'
-    \ }                                                                      " LSP plugin for Haskell Ide Plugin (hie)
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy finder conf
+Plug 'junegunn/fzf.vim'                                           " fuzzy finder
+Plug 'scrooloose/nerdtree'                                        " folders tree
+Plug 'scrooloose/nerdcommenter'                                   " code commenter
+Plug 'dracula/vim'                                                " dark theme
+Plug 'kien/rainbow_parentheses.vim'                               " for nested parentheses
+Plug 'tpope/vim-surround'                                         " quickly edit surroundings (brackets, html tags, etc)
+Plug 'junegunn/vim-easy-align'                                    " alignment plugin
+Plug 'neomake/neomake'                                            " run programs asynchronously and highlight errors
+Plug 'Valloric/MatchTagAlways'                                    " highlights html enclosing tags
+Plug 'Twinside/vim-hoogle'                                        " Hoogle search (Haskell) in Vim
+Plug 'Shougo/unite.vim'                                           " Required by some haskell plugins
+Plug 'ujihisa/unite-haskellimport'                                " Suggestions on imports
+Plug 'vmchale/dhall-vim'                                          " Syntax highlighting for Dhall lang
+Plug 'terryma/vim-multiple-cursors'                               " Multiple cursors selection, etc
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}        " LSP client + autocompletion plugin
+Plug 'itchyny/lightline.vim'                                      " configurable status line (can be used by coc)
+Plug 'derekwyatt/vim-scala'                                       " scala plugin
 
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
-
 " Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
-" Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc'
-Plug 'derekwyatt/vim-scala'                                     " scala plugin
 
 call plug#end()
 
 " End of plugins here
 " ===================
 
-" Use deoplete
-"let g:python3_host_prog = '/usr/bin/python3'
-"let g:deoplete#enable_at_startup = 1
-
 " airline: status bar at the bottom
 let g:airline_powerline_fonts=1
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#left_sep = ' '
-"let g:airline#extensions#tabline#left_alt_sep = '|'
 
-" Neomake on save
-" autocmd! BufWritePost * Neomake
+" if you want to disable auto detect, comment out those two lines (COC)
+"let g:airline#extensions#disable_rtp_load = 1
+"let g:airline_extensions = ['branch', 'hunks', 'coc']
+
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
+" Highlighting for jsonc filetype
+autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " Nerd commenter
 filetype plugin on
@@ -185,10 +173,6 @@ set nowrapscan " Don't go back to first match after the last match is found.
 " set foldmethod=indent
 " set foldlevelstart=1
 
-" Indentation
-"set autoindent
-"set smartindent
-
 " Tabs
 set expandtab     " Tab transformed in spaces
 set tabstop=2     " Sets tab character to correspond to x columns.
@@ -196,27 +180,6 @@ set tabstop=2     " Sets tab character to correspond to x columns.
                   " If expandtab option is on each <tab> character is converted to x spaces.
 set softtabstop=2 " column offset when PRESSING the tab key or the backspace key.
 set shiftwidth=2  " column offset when using keys '>' and '<' in normal mode.
-
-" Tabs
-" Displays the list of multiple match for a tag by default.
-" <C-]> is mapped to :tag <current_word> (jump to the first match) by default.
-" g<C-]> is mapped to :tjump <current_word> (displays the list if multiple matches exist)
-" nnoremap <C-]> g<C-]>
-
-function! Refresh_tags(...)
-  if !executable('ctags')
-    echohl ErrorMsg
-    echom 'Refresh_tags : `ctags` executable not found, cannot refresh tags.'
-    echohl None
-    return
-  endif
-  if a:0 > 0
-    let dirPath = fnamemodify(a:1, ":p")
-    call jobstart(["ctags", "-f", dirPath . "tags", "-R", dirPath])
-  else
-    call jobstart(["ctags", "-R", "."])
-  endif
-endfunction
 
 " Toggle display of tabs and EOF
 nnoremap <leader>l :set list!<CR>
@@ -228,90 +191,8 @@ augroup vimscript_augroup
   autocmd FileType vim nnoremap <buffer> <M-z> :execute "help" expand("<cword>")<CR>
 augroup END
 
-" Scala
-" augroup scala_augroup
-"  autocmd!
-"  autocmd BufWritePost *.scala :call Refresh_tags()
-"  autocmd BufWritePost *.scala Neomake
-" augroup END
-
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
-
-" let g:LanguageClient_loggingLevel = 'DEBUG'
-
-" LSP Plugin for Haskell (hie)
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_serverCommands = {
-   \ 'haskell': ['hie-wrapper', '--lsp', '-d', '-l', '~/hie.log'],
-   \ }
-
-"   \ 'scala': ['~/development/metals/bin/metals-vim'],
-"    \ 'scala': ['~/scalameta_lsp'],
-"    \ 'scala': ['/workspace/oss/gimmerrors/.stack-work/install/x86_64-linux/lts-11.22/8.2.2/bin/gimmerrors'],
-"    \ 'scala': ['~/coursier launch -r bintray:scalameta/maven org.scalameta:metals_2.12:0.1.0-M1+271-f80d7904 -M scala.meta.metals.Main'],
-
-" Generate scalameta_lsp executable
-" ./coursier bootstrap org.scalameta:metals_2.12:0.1.0-M1+271-f80d7904 -r bintray:scalameta/maven -r bintray:dhpcs/maven -M scala.meta.metals.Main -o scalameta_lsp -f --standalone
-
-" Sarsi (https://github.com/aloiscochard/sarsi)
-" call rpcstart('sarsi-nvim')
-
-" vim-scala
-au BufRead,BufNewFile *.sbt set filetype=scala
-
-" vim-lsc
-"let g:lsc_enable_autocomplete = v:false
-let g:lsc_server_commands = {
-  \ 'scala': {
-  \    'command': '~/development/metals/bin/metals-vim',
-  \    'log_level': 'Log'
-  \  }
-  \}
-
-let g:lsc_auto_map = {
-  \ 'GoToDefinition': 'gd',
-  \ 'FindReferences': 'gT',
-  \ 'FindCodeActions': 'rui',
-  \ 'ShowHover': 'K',
-  \ 'Completion': 'completefunc',
-\}
-
-" close preview (shown for hover / signature help)
-nnoremap <leader> <Esc> :pclose<CR>
-
-nnoremap <silent> <M-X> :LSClientAllDiagnostics<CR>
-nnoremap <silent> <M-Z> :ccl<CR>
-nnoremap <silent> <M-B> :call lsc#server#call(&filetype, 'workspace/executeCommand', { 'command': 'build-import' }, function('abs'))<CR>
-
-" No preview window on autocompletion
-set completeopt-=preview
-
-" Close preview window on autocompletion (metals / vim-lsc)
-"autocmd CompleteDone * silent! pclose
-
-"\ 'AllDiagnostics': 'gR' does not work
-"\ 'Rename': 'gR',
-
-" Shortcuts for LSP using Haskell
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> <C-g> :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> F :call LanguageClient_textDocument_formatting()<CR>
-nnoremap <silent> B :call LanguageClient_textDocument_references()<CR>
-nnoremap <silent> <C-a> :call LanguageClient_textDocument_codeAction()<CR>
-nnoremap <silent> Z :call LanguageClient_textDocument_documentSymbol()<CR>
-
-" Haskell plugins
-nnoremap <silent> ;h :execute "Unite -start-insert haskellimport"<CR>
-nnoremap <silent> <C-h> :execute "Unite hoogle"<CR>
-
-" Diagnostics highlighting
-hi link ALEError Error
-hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
-hi link ALEWarning Warning
-hi link ALEInfo SpellCap
 
 " Disable touchpad on startup / Enable it back on exit (at the OS level)
 " autocmd VimEnter * !touchpad-on-off
@@ -351,3 +232,101 @@ noremap <C-ScrollWheelLeft> <nop>
 noremap <ScrollWheelRight> <nop>
 noremap <S-ScrollWheelRight> <nop>
 noremap <C-ScrollWheelRight> <nop>
+
+" vim-scala
+au BufRead,BufNewFile *.sbt set filetype=scala
+
+" ------------------- COC config -----------------------
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Some server have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Remap for do codeAction of current line
+nmap <leader>ac <Plug>(coc-codeaction)
+
+" Remap for do action format
+"nmap <silent> F <Plug>(coc-action-format) "does not work
+nnoremap <silent> F :call CocAction('format')<CR>
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+" close preview (shown for hover / signature help)
+nnoremap <leader> <Esc> :pclose<CR>
+
+nnoremap <silent> <M-B> :call CocRequest('scalametals', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
+"nnoremap <silent> <M-Z> :ccl<CR>
+
+" No preview window on autocompletion (vim-lsc)
+"set completeopt-=preview
+
+" Close preview window on autocompletion (metals / vim-lsc)
+"autocmd CompleteDone * silent! pclose
+
+" Haskell plugins
+nnoremap <silent> ;h :execute "Unite -start-insert haskellimport"<CR>
+"nnoremap <silent> <C-h> :execute "Unite hoogle"<CR> " too slow
+
+" Diagnostics highlighting
+hi link ALEError Error
+hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
+hi link ALEWarning Warning
+hi link ALEInfo SpellCap
+
