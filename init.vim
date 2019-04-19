@@ -195,8 +195,8 @@ augroup END
 nnoremap <C-p> :FZF<CR>
 
 " Disable touchpad on startup / Enable it back on exit (at the OS level)
-" autocmd VimEnter * !touchpad-on-off
-" autocmd VimLeave * !touchpad-on-off
+autocmd VimEnter * !~/development/touchpad-off.sh
+autocmd VimLeave * !~/development/touchpad-on.sh
 
 " Disable arrow keys and page up / down
 noremap <Up> <nop>
@@ -219,19 +219,19 @@ inoremap <PageDown> <nop>
 vnoremap <PageDown> <nop>
 
 " Disable mouse / touchpad (only in vim)
-set mouse=
-noremap <ScrollWheelUp> <nop>
-noremap <S-ScrollWheelUp> <nop>
-noremap <C-ScrollWheelUp> <nop>
-noremap <ScrollWheelDown> <nop>
-noremap <S-ScrollWheelDown> <nop>
-noremap <C-ScrollWheelDown> <nop>
-noremap <ScrollWheelLeft> <nop>
-noremap <S-ScrollWheelLeft> <nop>
-noremap <C-ScrollWheelLeft> <nop>
-noremap <ScrollWheelRight> <nop>
-noremap <S-ScrollWheelRight> <nop>
-noremap <C-ScrollWheelRight> <nop>
+set mouse=nicr
+inoremap <ScrollWheelUp> <nop>
+inoremap <S-ScrollWheelUp> <nop>
+inoremap <C-ScrollWheelUp> <nop>
+inoremap <ScrollWheelDown> <nop>
+inoremap <S-ScrollWheelDown> <nop>
+inoremap <C-ScrollWheelDown> <nop>
+inoremap <ScrollWheelLeft> <nop>
+inoremap <S-ScrollWheelLeft> <nop>
+inoremap <C-ScrollWheelLeft> <nop>
+inoremap <ScrollWheelRight> <nop>
+inoremap <S-ScrollWheelRight> <nop>
+inoremap <C-ScrollWheelRight> <nop>
 
 " vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
@@ -314,6 +314,24 @@ nnoremap <leader> <Esc> :pclose<CR>
 nnoremap <silent> <M-B> :call CocRequest('scalametals', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
 "nnoremap <silent> <M-Z> :ccl<CR>
 
+" COC Snippets
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+
 " No preview window on autocompletion (vim-lsc)
 "set completeopt-=preview
 
@@ -325,8 +343,8 @@ nnoremap <silent> ;h :execute "Unite -start-insert haskellimport"<CR>
 "nnoremap <silent> <C-h> :execute "Unite hoogle"<CR> " too slow
 
 " Diagnostics highlighting
-hi link ALEError Error
-hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
-hi link ALEWarning Warning
-hi link ALEInfo SpellCap
+"hi link ALEError Error
+"hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
+"hi link ALEWarning Warning
+"hi link ALEInfo SpellCap
 

@@ -1,0 +1,372 @@
+# Adapted from: https://github.com/honza/vim-snippets
+
+#if
+snippet if
+	if (${1})
+		${0:${VISUAL}}
+endsnippet
+
+#if not
+snippet ifn
+	if (!${1})
+		${0:${VISUAL}}
+endsnippet
+
+#if-else
+snippet ife
+	if (${1})
+		${2:${VISUAL}}
+	else
+		${0}
+endsnippet
+
+#if-else-if
+snippet ifelif
+	if (${1})
+		${2:${VISUAL}}
+	else if (${3})
+		${0:${VISUAL}}
+endsnippet
+
+snippet eif
+	else if (${3})
+		${0:${VISUAL}}
+endsnippet
+
+# while loop
+snippet wh
+	while (${1:obj}) {
+		${0:${VISUAL}}
+	}
+endsnippet
+
+# for loop(classic)
+snippet for
+	for (${1:item} <- ${2:obj}) {
+		${0}
+	}
+endsnippet
+
+#for loop(indexed)
+snippet fori
+	for (${1:i} <- ${2:0} to ${3:obj}.length) {
+		${0}
+	}
+endsnippet
+
+#for comprehension
+snippet fory
+	for {
+		${1:item} <- ${2:obj}
+		${3:item} <- ${4:obj}
+		${5:item} <- ${6:obj}
+	} yield ${0}
+endsnippet
+
+#exceptions
+snippet try
+	try {
+		${1:${VISUAL}}
+	} catch {
+		case e: FileNotFoundException => ${2}
+		case e: IOException => ${3}
+	} finally {
+		${0}
+	}
+endsnippet
+
+#match
+snippet mat
+	${1:${VISUAL}} match {
+		case ${2} => ${0}
+	}
+endsnippet
+
+snippet match
+	${1: obj} match {
+		case ${2:e} => ${3}
+		case _ => ${0}
+	}
+endsnippet
+
+#case
+snippet case
+	case ${1:${VISUAL}} => ${0}
+endsnippet
+
+############################
+# methods and arguments    #
+############################
+
+#arg
+snippet arg
+	${1:a}: ${2:T}${0:, arg}
+endsnippet
+
+#args
+snippet args
+	${1:args}: ${0:T}*
+endsnippet
+
+#def
+snippet def
+	def ${1:name}(${2:arg}) = ${0:}
+endsnippet
+
+#private def
+snippet prdef
+	private def ${1:name}(${2:arg}) = ${0:}
+endsnippet
+
+#override def
+snippet ovdef
+	override def ${1:name}(${2:arg}) = ${0:}
+endsnippet
+
+#first class function(see scalabook p 188)
+snippet fcf
+	(${1:a}: ${2:T}) => $1 ${0}
+endsnippet
+
+snippet =>
+	${1:name} => ${0}
+endsnippet
+
+#recursion
+snippet rec
+	def ${1:name}(${0:arg}) =
+		if($2) $2
+		else $1($2)
+endsnippet
+
+#curried method
+snippet crdef
+	def ${1:name}(${2:arg})(${3:arg}) = ${0:}
+endsnippet
+
+#main method
+#check validity of T
+snippet main
+	def main(args: Array[String]):${1:T} = ${0:}
+endsnippet
+
+#named snippets for types
+snippet arr
+	Array${1:[T]}${0:()}
+endsnippet
+
+snippet list
+	List${1:[T]}${0:()}
+endsnippet
+
+snippet set
+	Set${1:[T]}${0:()}
+endsnippet
+
+#for maps
+snippet keyval
+	${1:key}->${2:val}${0:, keyval}
+endsnippet
+
+snippet map
+	Map[${1:T},${2:T}]${0:(keyval)}
+endsnippet
+
+snippet mmap
+	mutable.Map[${1:T},${2:T}]${0:(keyval)}
+endsnippet
+
+#collections methods
+
+#scope() with one arg
+snippet (a
+	(${1:a} => ${0})
+endsnippet
+
+#scope() with two args
+snippet {(
+	{(${1:a},${2:b}) =>
+		${0}
+	}
+endsnippet
+
+#filter
+snippet filter
+	${0:name}.filter (a
+endsnippet
+#map function
+
+snippet mapf
+	${0:name}.map (a
+endsnippet
+
+#flatmap
+snippet flatmap
+	${1:name}.flatMap${0:[T]}(a
+endsnippet
+
+#fold left
+snippet fldl
+	${1:name}.foldLeft(${0:first}) {(
+endsnippet
+
+#fold right
+snippet fldr
+	${1:name}.foldRight(${0:first}) {(
+endsnippet
+
+#fold left operator(if u wanna reduce readability of ur code)
+#use wildcard symbols
+snippet /:
+	(${1:first}/:${2:name})(${0})
+endsnippet
+
+#fold right operator
+snippet :\
+	(${1:first}:\${2:name})(${0})
+endsnippet
+
+#reduce left
+snippet redl
+	${1:name}.reduceLeft[${0:T}] {(
+endsnippet
+
+#reduce right
+snippet redr
+	${1:name}.reduceRight[${0:T}] {(
+endsnippet
+
+#zipWithIndex(safe way).
+#see http://daily-scala.blogspot.com/2010/05/zipwithindex.html
+snippet zipwi
+	${0:name}.view.zipWithIndex
+endsnippet
+
+#split
+snippet spl
+	${1:name}.split("${0:,}")
+endsnippet
+
+#end
+snippet val
+	val ${1:name}${2:: T} = ${0:value}
+endsnippet
+
+snippet var
+	var ${1:name}${2:: T} = ${0:value}
+endsnippet
+
+############################
+# classes
+#
+#extends
+snippet extends
+	extends ${0:what}
+endsnippet
+
+#with
+snippet with
+	with ${1:what}${0: with}
+endsnippet
+
+#auxiliary constructor(a. this)
+snippet athis
+	def this(arg) = this(arg)
+endsnippet
+
+#abstract class
+snippet abstract
+	abstract class ${1:name}${2:(arg)}${3: extends }${4: with} {
+		${5:override def toString = "$1"}
+		${0}
+	}
+endsnippet
+
+#class
+snippet class
+	class ${1:name}${2:(arg)}${3: extends }${4: with} {
+		${5:override def toString = "$1"}
+		${0}
+	}
+endsnippet
+
+#object
+snippet object
+	object ${1:name}${2:(arg)}${3: extends }${4: with} ${0:}
+endsnippet
+
+#trait
+snippet trait
+	trait ${1:name}${2: extends }${3: with} {
+		${0:}
+	}
+endsnippet
+
+#class with trait Ordered(page 265)
+snippet ordered
+	class ${1:name}${2:(arg)} extends Ordered[$1] ${3: with} {
+		${4:override def toString = "$1"}
+		def compare(that: $1) = ${5:this - that}
+		${0}
+	}
+endsnippet
+
+#case class
+snippet casecl
+	case class ${1:name}${2:(arg)}${3: extends }${4: with} ${0:}
+endsnippet
+
+############################
+# testing
+#
+#scalatest imports
+snippet scalatest
+	${1:import org.scalatest.Suite}
+	${0:import org.scalatest.FunSuite}
+endsnippet
+
+#assert
+snippet assert
+	assert(${1:a} === ${0:b})
+endsnippet
+
+#ensuring(p 296)
+snippet ensuring
+	ifel ensuring(${1:a}==${0:b})
+endsnippet
+
+#expect
+snippet expect
+	expect(${1:what}) {
+		${0}
+	}
+endsnippet
+
+#intercept
+snippet intercept
+	intercept[${1:IllegalArgumentException}] {
+		${0}
+	}
+endsnippet
+
+#test
+snippet test
+	test("${1:description}") {
+		${0}
+	}
+endsnippet
+
+#suite
+snippet suite
+	class ${0:name} extends Suite {
+		def test() {
+	}
+endsnippet
+
+#funsuite
+snippet fsuite
+	class ${1:name} extends FunSuite {
+		test("${0:description}") {
+	}
+endsnippet
+
