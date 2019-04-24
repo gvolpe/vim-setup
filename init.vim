@@ -195,8 +195,9 @@ augroup END
 nnoremap <C-p> :FZF<CR>
 
 " Disable touchpad on startup / Enable it back on exit (at the OS level)
-autocmd VimEnter * !~/development/touchpad-off.sh
-autocmd VimLeave * !~/development/touchpad-on.sh
+"autocmd VimEnter * !~/development/touchpad-off.sh
+"autocmd VimLeave * !~/development/touchpad-on.sh
+nnoremap <silent> <F3> :!~/development/touchpad-toggle.sh <enter><CR>
 
 " Disable arrow keys and page up / down
 noremap <Up> <nop>
