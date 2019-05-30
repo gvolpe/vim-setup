@@ -25,6 +25,8 @@ Plug 'terryma/vim-multiple-cursors'                               " Multiple cur
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}        " LSP client + autocompletion plugin
 Plug 'itchyny/lightline.vim'                                      " configurable status line (can be used by coc)
 Plug 'derekwyatt/vim-scala'                                       " scala plugin
+Plug 'jremmen/vim-ripgrep'                                        " blazing fast search using ripgrep
+Plug 'stefandtw/quickfix-reflector.vim'                           " make modifications right in the quickfix window
 
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
@@ -34,6 +36,9 @@ call plug#end()
 
 " End of plugins here
 " ===================
+
+" ripgrep smartcase (search with case insensitive)
+let g:rg_command = 'rg --vimgrep -S'
 
 " airline: status bar at the bottom
 let g:airline_powerline_fonts=1
