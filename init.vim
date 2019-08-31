@@ -18,6 +18,7 @@ Plug 'junegunn/vim-easy-align'                                    " alignment pl
 Plug 'neomake/neomake'                                            " run programs asynchronously and highlight errors
 Plug 'Valloric/MatchTagAlways'                                    " highlights html enclosing tags
 Plug 'Twinside/vim-hoogle'                                        " Hoogle search (Haskell) in Vim
+Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim' }                " ghcid for Haskell
 Plug 'Shougo/unite.vim'                                           " Required by some haskell plugins
 Plug 'ujihisa/unite-haskellimport'                                " Suggestions on imports
 Plug 'vmchale/dhall-vim'                                          " Syntax highlighting for Dhall lang
@@ -27,10 +28,10 @@ Plug 'itchyny/lightline.vim'                                      " configurable
 Plug 'derekwyatt/vim-scala'                                       " scala plugin
 Plug 'jremmen/vim-ripgrep'                                        " blazing fast search using ripgrep
 Plug 'stefandtw/quickfix-reflector.vim'                           " make modifications right in the quickfix window
+Plug 'Xuyuanp/nerdtree-git-plugin'                                " shows files git status on the NerdTree
 
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
-" Plug 'Xuyuanp/nerdtree-git-plugin'                              " Shows files git status on the NerdTree
 
 call plug#end()
 
@@ -320,7 +321,7 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " close preview (shown for hover / signature help)
 nnoremap <leader> <Esc> :pclose<CR>
 
-nnoremap <silent> <M-B> :call CocRequest('scalametals', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
+nnoremap <silent> <M-B> :call CocRequest('metals-vim', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
 "nnoremap <silent> <M-Z> :ccl<CR>
 
 " COC Snippets
@@ -356,4 +357,3 @@ nnoremap <silent> ;h :execute "Unite -start-insert haskellimport"<CR>
 "hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
 "hi link ALEWarning Warning
 "hi link ALEInfo SpellCap
-
