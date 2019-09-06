@@ -11,7 +11,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy finder
 Plug 'junegunn/fzf.vim'                                           " fuzzy finder
 Plug 'scrooloose/nerdtree'                                        " folders tree
 Plug 'scrooloose/nerdcommenter'                                   " code commenter
-Plug 'dracula/vim'                                                " dark theme
+Plug 'jacoborus/tender.vim'                                       " my favorite theme so far :)
 Plug 'kien/rainbow_parentheses.vim'                               " for nested parentheses
 Plug 'tpope/vim-surround'                                         " quickly edit surroundings (brackets, html tags, etc)
 Plug 'junegunn/vim-easy-align'                                    " alignment plugin
@@ -37,6 +37,9 @@ call plug#end()
 
 " End of plugins here
 " ===================
+
+" save when leaving insert mode
+autocmd InsertLeave * write
 
 " ripgrep smartcase (search with case insensitive)
 let g:rg_command = 'rg --vimgrep -S'
@@ -132,8 +135,7 @@ map <C-S> :NERDTreeFind<CR>
 " Other options
 let mapleader=','
 set backspace=2
-colorscheme dracula
-" colorscheme torte
+colorscheme tender
 syntax on
 set shell=/bin/bash
 set laststatus=2
