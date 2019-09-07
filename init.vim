@@ -29,6 +29,7 @@ Plug 'derekwyatt/vim-scala'                                       " scala plugin
 Plug 'jremmen/vim-ripgrep'                                        " blazing fast search using ripgrep
 Plug 'stefandtw/quickfix-reflector.vim'                           " make modifications right in the quickfix window
 Plug 'Xuyuanp/nerdtree-git-plugin'                                " shows files git status on the NerdTree
+Plug 'LnL7/vim-nix'                                               " nix support (highlighting, etc)
 
 " Plug 'easymotion/vim-easymotion'
 " Plug 'tpope/vim-repeat'
