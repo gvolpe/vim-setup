@@ -200,6 +200,9 @@ augroup vimscript_augroup
   autocmd FileType vim nnoremap <buffer> <M-z> :execute "help" expand("<cword>")<CR>
 augroup END
 
+" Spell check
+au BufNewFile,BufRead *.md set spell
+
 " Fuzzy finder shortcut
 nnoremap <C-p> :FZF<CR>
 
@@ -324,7 +327,7 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " close preview (shown for hover / signature help)
 nnoremap <leader> <Esc> :pclose<CR>
 
-nnoremap <silent> <M-B> :call CocRequest('metals-vim', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
+nnoremap <silent> <M-B> :call CocRequest('metals', 'workspace/executeCommand', { 'command': 'build-import' })<CR>
 "nnoremap <silent> <M-Z> :ccl<CR>
 
 " COC Snippets
